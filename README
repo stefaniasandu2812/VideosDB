@@ -1,0 +1,40 @@
+// Sandu Stefania-Cristina Tema1-POO-2020
+Am adaugat proiectului 3 pachete populate cu clasele specifice actiunilor pe care un utilizator le poate executa, commands, queries si recommendations.
+
+# Commands
+
+Pentru procesarea comenzilor am creat o clasa Commands unde sunt implementate 3 metode corespunzatoare comenzilor favorite, rating si view.In cazul lui favorite, pentru user-ul respectiv, verific daca a vazut show-ul pe care vrea sa-l adauge ca favorit si daca acesta nu exista deja in lista sa de favorite, atunci il adaug.Altfel, returnez un mesaj de eroare.
+
+Comanda rating verifica daca user-ul a vazut show-ul(daca nu, mesajul va afisa o eroare), iar apoi fie daca este film sau serial, se verifica daca a fost rated sau nu. Pentru a verifica acest lucru, am creat in clasa UserInputData un hashmap ratedMovies pentru filme si ratedSerials pentru seriale care pastreaza show-urile carora un user le-a oferit rating si nota pe care a dat-o.In cazul serialelor, am adaugat in clasa Season o lista de rating-uri reprezentand notele pe care le-a primit un sezon, pentru a calcula rating-ul unui serial si o lista ratedByUsers care contine numele user-ilor care au dat rating acelui sezon (in cazul serialelor verifi daca acesta a fost rated sau daca user-ul a oferit nota acelui sezon).
+
+Pentru a marca un show ca fiind vazut, verific daca a fost vazut si atunci doar incrementez nr de vizualizari, iar daca nu il adaug in map-ul de history din clasa UserInputData.
+
+# Queries
+
+Pentru query-urile care implica actori am creat clasa ActorQuery, unde am implementat cautarile in functie de average, awards si description.In pachetul sort se afla clasa SortingClass ce prezinta 2 metode, una pentru sortarea unui hashmap mai intai dupa valoare, apoi dupa nume, alfabetic, folosind un comparator personalizat.A doua metoda este cea apelata in clasele de queries si are rolul de a returna un mesaj si lista cu rezultatele cautarilor.
+
+Media unui actor este calculata cu ajutorul unui hashmap actorsAverage din clasa ActorInputData, unde se adauga pentru fiecare actor, rating-urile filmelor si serialelor in care a jucat(in aceeasi clasa exista si o metoda care intoarce media actorului), iar apoi copiez valorile intr-un nou map cu numele actorilor si media lor si il sortez.
+
+Pentru cautarile in functie de awards, folosesc o variabila ok, ca in cazul in care unul dintre award-urile mentionate nu se gaseste, sa opresc cautarea, iar daca aceasta este 1 atunci le-am gasit pe toate si le adaug intr-un map, iar apoi le sortez(in ActorInputData am creat o metoda totalAwards care imi returneaza nr total de premii castigate de un actor, fiind criteriul dupa care este sortat map-ul).
+
+In cazul cautarii actorilor dupa cuvintele ce apar in descriere, caut in descrierea fiecarui actor, iar pentru a evita cazurile particulare, inlocuiesc toate semnele de punctuatie cu spatiu si transform toate literele mari cu litere mici.Apoi sortez lista cu numele actorilor.
+
+Query-urile pentru video-uri se impart in query-uri pentru filme si seriale.In ambele cazuri am folosit metoda verifyFilters care va returna o lista de filme, respectiv seriale din anul si/sau genul dat.
+
+Pentru aceste cautari se foloseste cate un map care contine, in general, titlul show-ului si rating-ul/de cate ori este favorit/durata/nr de vizualizari, care apoi este sortat.
+
+Query-ul pentru useri verifica ce useri au dat note si de cate ori au oferit rating, folosindu-se de un hashmap.
+
+# Recommendations
+
+Pentru recomandarile care se aplica tuturor utilizatorilor, am folosit metodele standard si bestUnseen din clasa Recommendations.La standard se intoarce primul film nevazut , iar daca acestea apar, se itereaza apoi prin serialele din database.BestUnseen se foloseste de campul orderNumber, din clasa ShowInput, ce retine ordinea din database si ajuta la sortarea filmelor si serialelor.
+
+Recomandarile pentru utilizatorii premium sunt implementate ca metode to in clasa Recommendations, verificandu-se tipul abonamentului la inceput.
+
+Pentru determinarea show-urilor populare se foloseste noViews din clasa ShowInput care prezinta de cate ori a fost show-ul vizionat.Dupa setarea acestei variabile, se creeaza un map cu genurile filmelor si serialelor din database(key), iar ca valoare se copiaza nr de vizualizari pentru show-ul din acel gen.Apoi, daca user-ul este premium (ok = 0), se sorteaza map-ul descrescator apoi alfabetic.Cu ajutorul unei liste in care copiez show-urile vizionate de user-ul dat, veirific daca genul din map corespune cu cel al show-ului vizionat, iar daca nu, acela va deveni video-ul recomandat.
+
+Pentru fiecare film si serial se determina de cate ori este in lista de favorite a unui user, folosind campul favorite din ShowInput, apoi se sorteaza lista acestora.
+
+La recomandarile bazate pe search, creez o lista cu show-urile din database care se incadreaza in genul dat la input, o sortez dupa rating apoi alfabetic si verific daca au fost vizualizate de user-ul respectiv.
+
+Link repo:https://github.com/stefaniasandu2812/Tema1.git
